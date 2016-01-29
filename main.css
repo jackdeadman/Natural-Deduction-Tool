@@ -14,3 +14,18 @@ input{
     margin: 0 auto;
     padding: 10px;
 }
+
+.inner-wrapper{
+    border: 1px solid #e3e3e3;
+    width: 90%;
+    margin: 5px auto;
+    padding: 5px;
+}
+
+li{
+    display: flex;
+}
+
+li p{
+    width: 30%;
+}
