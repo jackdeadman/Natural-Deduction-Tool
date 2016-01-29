@@ -5,6 +5,8 @@
 input{
     padding: 10px;
     width: 100%;
+    outline: none;
+    margin: 5px 0;
 }
 
 .main-wrapper{
