@@ -11,9 +11,9 @@
         <label class="hidden" for="premise-input">Enter your premises, separated by commas:</label>
         <input id="premise-input" name="premise-input" placeholder="Enter your premises, separated by commas: "></input>
         
-        <div class="inner-wrapper">
+        <div class="inner-wrapper hidden">
             
-            <ol>
+            <ol id="expressions">
                 <li><p class="expression">P</p><p class="right-align type">Premise</p></li>
                 <li><p class="expression">Q</p><p class="right-align type">Premise</p></li>
                 <li><p class="expression">P => J</p><p class="right-align type">Premise</p></li>
@@ -29,5 +29,6 @@
     </div>
     
     <script src="js/main.js"></script>
+    <script src="js/parsetree.js"></script>
 </body>
 </html>
