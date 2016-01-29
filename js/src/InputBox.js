@@ -16,6 +16,10 @@ var InputBox = (function(){
         this.node.classList.add('disabled');
         this.node.disabled = true;
         this.node.blur();
+        console.log(this.node.id);
+        if(this.node.id === "premise-input"){
+            this.editButton.classList.remove('hidden');
+        }
     }
     
     InputBox.prototype.enable = function(focus) {
@@ -37,6 +41,7 @@ var InputBox = (function(){
     
     function InputBox(node) {
         this.node = node;
+        this.editButton = document.getElementById("input-parent").getElementsByTagName("button")[0];
         var that = this;
         
         this.node.addEventListener('keydown', function(e) {
