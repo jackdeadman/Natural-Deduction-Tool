@@ -12,6 +12,9 @@ module.exports = function(grunt){
             html: {
                 files: ['*.html'],
             },
+            scripts: {
+                files: ['*.js'],
+            }
         },
         
         connect: {
@@ -21,12 +24,20 @@ module.exports = function(grunt){
                     base: '.'
                 }
             }
+        },
+        
+        concat: {
+            dist: {
+                src: ['js/src/Box.js','js/src/Expressions.js', 'js/src/InputBox.js', 'js/src/parsetree.js', 'js/src/main.js'],
+                dest: 'js/main.js'
+            }
         }
     });
         
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat')
     
-    grunt.registerTask('default',['connect','watch']);
+    grunt.registerTask('default',['concat','connect','watch']);
     
 }
