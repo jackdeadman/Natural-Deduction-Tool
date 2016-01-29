@@ -41,7 +41,7 @@ var InputBox = (function(){
     
     function InputBox(node) {
         this.node = node;
-        this.editButton = document.getElementById("expression-input-container").getElementsByTagName("button")[0];
+        this.editButton = document.getElementById("premise-edit-button");
         var that = this;
         
         this.node.addEventListener('keydown', function(e) {
