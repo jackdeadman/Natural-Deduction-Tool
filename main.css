@@ -1,9 +1,13 @@
+*{
+    box-sizing: border-box;
+}
+
 .hidden{
     display: none;
 }
 
 input{
-    padding: 10px;
+    padding: 20px;
     display: block;
     margin: 20px 0;
     width: 90%;
@@ -26,15 +30,22 @@ input:disabled{
     border-bottom: 1px solid #ccc;
     margin: 10px 20px;
     width: 50%;
+    padding-left: 0;
 }
 
 .input-wrapper{
     display: flex;
+    width: 90%;
+}
+
+#premise-input{
+    width: 90%;
 }
 
 .button-small{
     align-self: center;
     height: 30px;
+    width: 10%;
 }
 
 .main-wrapper{
@@ -46,7 +57,7 @@ input:disabled{
 .inner-wrapper{
     border: 1px solid #e3e3e3;
     width: 90%;
-    margin: 5px auto;
+    margin: 5px 0;
     padding: 5px;
 }
 
