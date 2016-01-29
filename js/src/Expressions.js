@@ -1,6 +1,10 @@
 var Expressions = (function() {
     var template = '<li><p class="expression">{EXPRESSION}</p><p class="right-align type">{LAW}</p></li>';
     
+    function compileExp(exp) {
+        return template.replace('{EXPRESSION}', exp.expression)
+                       .replace('{LAW}', exp.law);
+    }
     
     function Expressions(node) {
         this.node = node;
@@ -15,6 +19,17 @@ var Expressions = (function() {
             }
         });
     };
+    
+    Expressions.prototype.addExpression = function(exp, render) {
+        this.expressions.push(exp);
+        // Optimise rendering so no need to re-render all
+        if (render)
+            this.node.innerHTML += compileExp({
+                expression: 'This will be automatic',
+                law: exp
+            });
+        
+    }
 
     Expressions.prototype.render = function() {
         this.node.innerHTML = '';

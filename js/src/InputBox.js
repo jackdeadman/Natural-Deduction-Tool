@@ -31,6 +31,10 @@ var InputBox = (function(){
         this.submitFn = fn;
     }
     
+    InputBox.prototype.clear = function() {
+        this.node.value = '';
+    }
+    
     function InputBox(node) {
         this.node = node;
         var that = this;

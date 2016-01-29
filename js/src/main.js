@@ -30,5 +30,11 @@
         expressionsContainerBox.show();
         ruleInputBox.enable(true);
     });
+    
+    
+    ruleInputBox.submitFn = function() {
+        expressionsBox.addExpression(ruleInput.value, true);
+        this.clear();
+    };
 
 })();

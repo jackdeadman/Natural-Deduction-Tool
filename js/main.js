@@ -16,6 +16,10 @@ var Box = (function() {
 var Expressions = (function() {
     var template = '<li><p class="expression">{EXPRESSION}</p><p class="right-align type">{LAW}</p></li>';
     
+    function compileExp(exp) {
+        return template.replace('{EXPRESSION}', exp.expression)
+                       .replace('{LAW}', exp.law);
+    }
     
     function Expressions(node) {
         this.node = node;
@@ -29,8 +33,18 @@ var Expressions = (function() {
                 law: 'Premise'
             }
         });
-        console.log(this.expressions);
     };
+    
+    Expressions.prototype.addExpression = function(exp, render) {
+        this.expressions.push(exp);
+        // Optimise rendering so no need to re-render all
+        if (render)
+            this.node.innerHTML += compileExp({
+                expression: 'This will be automatic',
+                law: exp
+            });
+        
+    }
 
     Expressions.prototype.render = function() {
         this.node.innerHTML = '';
@@ -79,6 +93,10 @@ var InputBox = (function(){
     
     InputBox.prototype.onSubmit = function(fn) {
         this.submitFn = fn;
+    }
+    
+    InputBox.prototype.clear = function() {
+        this.node.value = '';
     }
     
     function InputBox(node) {
@@ -186,7 +204,6 @@ var InputBox = (function(){
   }  
     
 (function(){
-    console.log('here');
     var mainWrapper = document.getElementsByClassName('main-wrapper');
     var premiseInput = document.getElementById('premise-input');
     var conclusionInput = document.getElementById('conclusion-input');
@@ -218,5 +235,11 @@ var InputBox = (function(){
         expressionsContainerBox.show();
         ruleInputBox.enable(true);
     });
+    
+    
+    ruleInputBox.submitFn = function() {
+        expressionsBox.addExpression(ruleInput.value, true);
+        this.clear();
+    };
 
 })();
