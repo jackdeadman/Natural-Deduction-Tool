@@ -16,6 +16,10 @@ input.disabled {
     border: none;
 }
 
+input:disabled{
+    background-color: #fff;
+}
+
 .small-input{
     border: none;
     border-bottom: 1px solid #ccc;
