@@ -5,8 +5,9 @@
 input{
     padding: 10px;
     display: block;
-    margin: 20px auto;
+    margin: 20px 0;
     width: 90%;
+    height: 20px;
     outline: none;
     transition: display ease-in-out 0.5s;
 }
@@ -27,7 +28,14 @@ input:disabled{
     width: 50%;
 }
 
+.input-wrapper{
+    display: flex;
+}
 
+.button-small{
+    align-self: center;
+    height: 30px;
+}
 
 .main-wrapper{
     width: 70%;
