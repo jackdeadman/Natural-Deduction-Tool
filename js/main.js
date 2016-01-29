@@ -222,6 +222,7 @@ var InputBox = (function(){
     
     conclusionInputBox.disable();
     expressionsContainerBox.hide();
+    premiseInputBox.enable(true);
     
     premiseInputBox.onSubmit(function() {
         premiseInputBox.disable();
