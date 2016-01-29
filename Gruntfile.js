@@ -12,6 +12,9 @@ module.exports = function(grunt){
             html: {
                 files: ['*.html'],
             },
+            scripts: {
+                files: ['*.js'],
+            }
         },
         
         connect: {
