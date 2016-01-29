@@ -24,12 +24,20 @@ module.exports = function(grunt){
                     base: '.'
                 }
             }
+        },
+        
+        concat: {
+            dist: {
+                src: ['js/src/main.js', 'js/src/parsetree.js'],
+                dest: 'js/main.js'
+            }
         }
     });
         
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat')
     
-    grunt.registerTask('default',['connect','watch']);
+    grunt.registerTask('default',['concat','connect','watch']);
     
 }
