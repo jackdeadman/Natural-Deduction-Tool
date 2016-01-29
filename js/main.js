@@ -51,26 +51,55 @@ var InputBox = (function(){
 })();
 
 var Expressions = (function() {
+    var template = '<li><p class="expression">{EXPRESSION}</p><p class="right-align type">{LAW}</p></li>';
     
-    function Expressions(node, premises) {
+    
+    function Expressions(node) {
         this.node = node;
-        this.expressions = premises;
+        this.expressions = [];
     }
+    
+    Expressions.prototype.addPremises = function(premises) {
+        this.expressions = premises.map(function(exp) {
+            return {
+                expression: exp,
+                law: 'Premise'
+            }
+        });
+        console.log(this.expressions);
+    };
 
     Expressions.prototype.render = function() {
-        this.node.html = '';
+        this.node.innerHTML = '';
         
-        for (var i=0; i<expressions.length; i++) {
-            var expression = expressions[i];
-            this.node.html += '<li><p class="expression">'+  +'</p><p class="right-align type">Premise</p></li>';
-            
-            
-            
+        
+        for (var i=0; i<this.expressions.length; i++) {
+            var expression = this.expressions[i];
+            this.node.innerHTML += template
+                            .replace('{EXPRESSION}', expression.expression)
+                            .replace('{LAW}', expression.law);
         }
         
-    }
+    };
+    
     return Expressions;
     
+})();
+
+var Box = (function() {
+    function Box(node) {
+        this.node = node;
+    }
+    
+    Box.prototype.hide = function() {
+        this.node.classList.add('hidden');
+    };
+    
+    Box.prototype.show = function() {
+        this.node.classList.remove('hidden');
+    };
+    
+    return Box;
 })();
 
 
@@ -81,13 +110,21 @@ var Expressions = (function() {
     var mainWrapper = document.getElementsByClassName('main-wrapper');
     var premiseInput = document.getElementById('premise-input');
     var conclusionInput = document.getElementById('conclusion-input');
+    var ruleInput = document.getElementById('rule-input');
+    
     var expressions = document.getElementById('expressions');
+    var expressionsContainer = document.getElementById('expression-input-container');
+    
     
     var premiseInputBox = new InputBox(premiseInput);
     var conclusionInputBox = new InputBox(conclusionInput);
-    var expressionsBox = new Expressions(expressions, ['a','b']);
+    var expressionsBox = new Expressions(expressions);
+    var expressionsContainerBox = new Box(expressionsContainer);
+    var ruleInputBox = new InputBox(ruleInput);
+    
     
     conclusionInputBox.disable();
+    expressionsContainerBox.hide();
     
     premiseInputBox.onSubmit(function() {
         premiseInputBox.disable();
@@ -96,7 +133,10 @@ var Expressions = (function() {
     
     conclusionInputBox.onSubmit(function() {
         conclusionInputBox.disable();
+        expressionsBox.addPremises(premiseInput.value.split(','));
         expressionsBox.render();
+        expressionsContainerBox.show();
+        ruleInputBox.enable(true);
     });
     
     
