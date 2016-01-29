@@ -4,9 +4,17 @@
 
 input{
     padding: 10px;
-    width: 100%;
+    display: block;
+    margin: 20px auto;
+    width: 90%;
     outline: none;
-    margin: 5px 0;
+}
+
+.small-input{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin: 10px 20px;
+    width: 50%;
 }
 
 .main-wrapper{
@@ -22,10 +30,20 @@ input{
     padding: 5px;
 }
 
-li{
-    display: flex;
-}
 
 li p{
+    display: inline-block;
+    padding: 0 10px;
     width: 30%;
+    word-wrap: break-word;
+    vertical-align: middle;
+}
+
+.expression{
+    font-weight: bold;
+}
+
+.type{
+    color: #757575;
+    font-style: italic;
 }
