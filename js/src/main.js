@@ -1,4 +1,7 @@
 (function(){
+    
+    // alert("You are the 10 millionth visitor! You win a prize!");
+    
     var mainWrapper = document.getElementsByClassName('main-wrapper');
     var premiseInput = document.getElementById('premise-input');
     var conclusionInput = document.getElementById('conclusion-input');

@@ -29,7 +29,7 @@ module.exports = function(grunt){
                 files: ['*.html'],
             },
             scripts: {
-                files: ['*.js'],
+                files: ['js/src/*.js'],
                 tasks: ['concat']
             },
         }

@@ -1,6 +1,16 @@
 var parse = (function(){
     
     var symbols = [
+    //  {
+    //      name: "opening-bracket",
+    //      symbol: "(",
+    //      precedence: 4
+    //  },
+    //  {
+    //      name: "closing-bracket",
+    //      symbol: ")",
+    //      precedence: 4
+    //  },
      {
          name: "iff",
          symbol: "<=>",
@@ -32,7 +42,7 @@ var parse = (function(){
          arity: 1
      }
     ];
-    
+        
     function Expression(){
         //either a value (like a word, terminal etc), or an operator in a larger expression
         this.value = arguments[0];
@@ -66,90 +76,92 @@ var parse = (function(){
         return false;
     }
     
-    function parse(input){
-        var operatorStack = [
-            // {
-            //     name:"stack symbol",
-            //     symbol:"$",
-            //     precedence:Number.NEGATIVE_INFINITY
-            // }
-        ];
-        var exprStack = [];
-        
-        var symbolsRegx = symbols.map(function(el) {
-            if(el.symbol === "^"){
+    function preprocess(input){
+         var symbolsRegx = symbols.map(function(el) {
+             //|| el.symbol === "(" || el.symbol === ")"
+            if(el.symbol === "^" ){
                 return "\\" + el.symbol; 
             }
             
             return el.symbol;
         }).join('|');
         
+        console.log(symbolsRegx);
+        
         var regex = new RegExp("\\)|\\(|[a-zA-Z]+|" + symbolsRegx, "g");
         
         var tokenList = input.match(regex);
         
-        console.log(tokenList);
-                
-        for(t in tokenList){
-            var token = tokenList[t];
-            var tokenSymbol = stringToSymbol(token);
+        return tokenList;
+    }
+    
+    function applyOperator(operatorStack, exprStack){
+        
+        var operator = operatorStack.pop();
+        
+        if(operator.arity === 1){
+            var rightExpr = exprStack.pop();
             
-            if(token === "("){
-                operatorStack.push({symbol: "(", precedence: Number.NEGATIVE_INFINITY});
-            }else if(token === ")"){
-                
-                console.log(operatorStack);
-                
-                while(operatorStack[operatorStack.length-1].value !== "("){
-                    var operator = operatorStack.pop();
-                    
-                    console.log("Operator stack:" + operatorStack[operatorStack.length-1]);
-                    
-                    console.log(operator);
-                    
-                    if(operator.arity === 1){
-                        var expr1 = exprStack.pop();
-                        exprStack.push(new Expression(operator, expr1));
-                    }else{
-                        var expr2 = exprStack.pop();
-                        var expr1 = exprStack.pop();
-                        exprStack.push(new Expression(operator, expr1, expr2));
-                    }
-                }
-                operatorStack.pop();
-                
-            }else if(isSymbol(token)){
-                console.log(operatorStack);
-                console.log(exprStack);
-                if(operatorStack.length === 0){
-                    // var expr1 = exprStack.pop();
-                    // exprStack.push(new Expression(operator, expr1));
-                    operatorStack.push(tokenSymbol);
-                }else{
-                    while(operatorStack[operatorStack.length-1].precedence >= tokenSymbol.precedence){
-                        var operator = operatorStack.pop();
-                        if(tokenSymbol.arity === 1){
-                            var expr1 = exprStack.pop();
-                            exprStack.push(new Expression(operator, expr1));
-                        }else{
-                            var expr2 = exprStack.pop();
-                            var expr1 = exprStack.pop();
-                            exprStack.push(new Expression(operator, expr1, expr2));
-                        }
-                    }
-                    operatorStack.push(tokenSymbol);
-                }
-                
-                
-                
-            }else{
-                exprStack.push(new Expression(token));
-            }
+            exprStack.push(new Expression(operator, rightExpr));
+        }else if(operator.arity === 2){
+            var rightExpr = exprStack.pop();
+            var leftExpr = exprStack.pop();
+            
+            exprStack.push(new Expression(operator, leftExpr, rightExpr));
         }
         
-                    
-        console.log(operatorStack);
+    }
+    
+    function parse(input){
+        var operatorStack = [];
+        var exprStack = [];
+        
+        var tokenList = preprocess(input);
+        
+        console.log(tokenList);
+                
+        for(var tokenIndex in tokenList){
+            var token = tokenList[tokenIndex];
+            var tokenSymbol = stringToSymbol(token);
+            console.log(token);
+            
+            if(token === "(" || (operatorStack.length === 0) && (isSymbol(token))){
+                if(isSymbol(token)){
+                    operatorStack.push(tokenSymbol);
+                }else{
+                    operatorStack.push(token);
+                }
+            }else if(token === ")"){
+                while(operatorStack[operatorStack.length-1] !== "("){
+                    applyOperator(operatorStack, exprStack);
+                }
+                operatorStack.pop();
+            }else if(isSymbol(token)){
+                if(operatorStack[operatorStack.length-1] === "(" || operatorStack[operatorStack.length-1].precedence <= tokenSymbol.precedence){
+                    operatorStack.push(tokenSymbol);
+                }else if(operatorStack[operatorStack.length-1].precedence > tokenSymbol.precedence){
+                    //only works for binary operations
+                    applyOperator(operatorStack, exprStack);
+                    operatorStack.push(tokenSymbol);
+                }
+            }else if(!isSymbol(token)){
+                exprStack.push(new Expression(token));
+            }
+            
+        }
+        
         console.log(exprStack);
+        console.log(operatorStack);
+        
+        while(operatorStack.length !== 0 && exprStack.length !== 0){
+            applyOperator(operatorStack, exprStack);
+        }
+        
+        // var operator = operatorStack.pop();
+        // var rightExpr = exprStack.pop();
+        // var leftExpr = exprStack.pop();
+        
+        // exprStack.push(new Expression(operator, leftExpr, rightExpr));
         
         return exprStack.pop();
         
@@ -369,6 +381,9 @@ var InputBox = (function(){
   }  
     
 (function(){
+    
+    // alert("You are the 10 millionth visitor! You win a prize!");
+    
     var mainWrapper = document.getElementsByClassName('main-wrapper');
     var premiseInput = document.getElementById('premise-input');
     var conclusionInput = document.getElementById('conclusion-input');
