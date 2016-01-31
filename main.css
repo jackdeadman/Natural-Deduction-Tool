@@ -11,10 +11,10 @@ html{
 }
 
 input{
+    width: 100%;
     padding: 20px;
     display: block;
     margin: 20px 0;
-    width: 90%;
     height: 20px;
     outline: none;
     transition: display ease-in-out 0.5s;
@@ -32,53 +32,61 @@ input:disabled{
 .small-input{
     border: none;
     border-bottom: 1px solid #ccc;
-    margin: 10px 20px;
-    width: 50%;
     padding-left: 0;
 }
 
 .input-wrapper{
     display: flex;
-    width: 90%;
-}
-
-#premise-input{
-    width: 90%;
 }
 
 .button-small{
     align-self: center;
-    height: 30px;
-    width: 10%;
 }
 
 .main-wrapper{
-    width: 70%;
+    width: 60%;
     margin: 0 auto;
     padding: 10px;
 }
 
 .inner-wrapper{
     border: 1px solid #e3e3e3;
-    width: 90%;
+    width: 100%;
     margin: 5px 0;
-    padding: 5px;
+    padding: 20px;
 }
 
+ol {
+    margin-left: 20px;
+    padding: 0;
+}
 
 li p{
     display: inline-block;
     padding: 0 10px;
-    width: 30%;
     word-wrap: break-word;
     vertical-align: middle;
 }
 
 .expression{
     font-weight: bold;
+    width: 250px;
 }
 
 .type{
     color: #757575;
     font-style: italic;
+    text-align: right;
+}
+
+@media all and (max-width: 700px){
+    .main-wrapper{
+        width: 100%;
+        margin: 0;
+        font-size: 1.6em;
+    }
+    
+    .expression{
+        width: 400px;
+    }
 }
