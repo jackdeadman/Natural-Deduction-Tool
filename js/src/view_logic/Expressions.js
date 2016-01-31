@@ -25,7 +25,7 @@ var Expressions = (function() {
         // Optimise rendering so no need to re-render all
         if (render)
             this.node.innerHTML += compileExp({
-                expression: Parser.toString(Parser.parse(exp)),
+                expression: Parser.parse(exp).toString(),
                 law: exp
             });
         
@@ -39,7 +39,7 @@ var Expressions = (function() {
             console.log(this.expressions);
             var expression = this.expressions[i];
             this.node.innerHTML += template
-                            .replace('{EXPRESSION}', Parser.toString(expression.expression))
+                            .replace('{EXPRESSION}', expression.expression.toString())
                             .replace('{LAW}', expression.law);
         }
         

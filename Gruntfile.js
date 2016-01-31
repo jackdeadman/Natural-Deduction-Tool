@@ -14,7 +14,7 @@ module.exports = function(grunt){
         concat: {
             dist: {
                 src: [
-                    'js/src/models/Operator.js', 'js/src/models/Parser.js', 'js/src/models/Rules.js',
+                    'js/src/models/Operator.js', 'js/src/models/Expression.js', 'js/src/models/Parser.js', 'js/src/models/Rules.js',
                     'js/src/view_logic/Box.js', 'js/src/view_logic/Expressions.js', 'js/src/view_logic/InputBox.js',
                     'js/src/main.js'
                 
