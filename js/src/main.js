@@ -37,8 +37,19 @@
     
     
     ruleInputBox.submitFn = function() {
-        expressionsBox.addExpression(Parser.parse(ruleInput.value, true));
-        this.clear();
+        var input = ruleInput.value.split(' ');
+        var rule = input[0];
+        var line = input[1];
+        
+        if (rule === 'nn') {
+            console.log('here');
+            console.log(expressionsBox.getLine(line));
+            expressionsBox.addLine({
+                expression: Rule.doubleNegation(expressionsBox.getLine(line).expression),
+                law: "Double Negation"
+            }, true);
+            this.clear();
+        }
     };
 
 })();

@@ -20,15 +20,19 @@ var Expressions = (function() {
         });
     };
     
-    Expressions.prototype.addExpression = function(exp, render) {
-        this.expressions.push(Parser.parse(exp));
+    Expressions.prototype.addLine = function(line, render) {
+        this.expressions.push(line);
+
         // Optimise rendering so no need to re-render all
         if (render)
             this.node.innerHTML += compileExp({
-                expression: Parser.parse(exp).toString(),
-                law: exp
+                expression: line.expression.toString(),
+                law: line.law
             });
-        
+    }
+    
+    Expressions.prototype.getLine = function(line) {
+        return this.expressions[line-1]
     }
 
     Expressions.prototype.render = function() {
