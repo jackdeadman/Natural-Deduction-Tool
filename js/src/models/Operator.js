@@ -18,7 +18,7 @@ var Operator = (function() {
             arity: 2
         },
         or: {
-            symbol: "_",
+            symbol: "+",
             precedence: 2,
             arity: 2
         },
