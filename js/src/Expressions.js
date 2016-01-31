@@ -14,18 +14,18 @@ var Expressions = (function() {
     Expressions.prototype.addPremises = function(premises) {
         this.expressions = premises.map(function(exp) {
             return {
-                expression: exp,
+                expression: Parser.parse(exp),
                 law: 'Premise'
             }
         });
     };
     
     Expressions.prototype.addExpression = function(exp, render) {
-        this.expressions.push(exp);
+        this.expressions.push(Parser.parse(exp));
         // Optimise rendering so no need to re-render all
         if (render)
             this.node.innerHTML += compileExp({
-                expression: 'This will be automatic',
+                expression: Parser.toString(Parser.parse(exp)),
                 law: exp
             });
         
@@ -36,9 +36,10 @@ var Expressions = (function() {
         
         
         for (var i=0; i<this.expressions.length; i++) {
+            console.log(this.expressions);
             var expression = this.expressions[i];
             this.node.innerHTML += template
-                            .replace('{EXPRESSION}', expression.expression)
+                            .replace('{EXPRESSION}', Parser.toString(expression.expression))
                             .replace('{LAW}', expression.law);
         }
         

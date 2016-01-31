@@ -1,4 +1,4 @@
-var parse = (function(){
+var Parser = (function(){
     
     var symbols = [
     //  {
@@ -167,6 +167,46 @@ var parse = (function(){
         
     }
     
-    return parse;
+    
+    function size(tree) {
+        if (tree) {
+            return 1 + size(tree.left) + size(tree.right);
+        }
+        return 0;
+    }
+    
+    
+    function printTree(tree, letters) {
+        
+        if (tree) {
+            
+            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+                letters.push('(');
+            printTree(tree.left, letters);
+            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+                letters.push(')');
+            
+            if (tree.value.symbol) {
+                letters.push(tree.value.symbol);    
+            } else {
+                letters.push(tree.value);
+            }
+            
+            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+                letters.push('(');
+            printTree(tree.right, letters);
+            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+                letters.push(')');
+        }
+    }
+    
+    return {
+        parse: parse,
+        toString: function(tree) {
+            var s = [];
+            printTree(tree, s);
+            return s.join('');
+        }
+    };
     
 })();

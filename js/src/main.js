@@ -37,7 +37,7 @@
     
     
     ruleInputBox.submitFn = function() {
-        expressionsBox.addExpression(ruleInput.value, true);
+        expressionsBox.addExpression(Parser.parse(ruleInput.value, true));
         this.clear();
     };
 

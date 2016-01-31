@@ -1,4 +1,51 @@
-var parse = (function(){
+var Rules = (function() {
+    
+    var symbols = [
+     {
+         name: "iff",
+         symbol: "<=>",
+         precedence: 0,
+         arity: 2
+     },
+     {
+         name: "implies",
+         symbol: "=>",
+         precedence: 1,
+         arity: 2    
+     },
+     {
+         name: "and",
+         symbol: "^",
+         precedence: 2,
+         arity: 2
+     },
+     {
+         name: "or",
+         symbol: "v",
+         precedence: 2,
+         arity: 2
+     },
+     {
+         name: "not",
+         symbol: "¬",
+         precedence: 3,
+         arity: 1
+     }
+    ];
+    
+    function doubleNegation(tree) {
+        var root = symbols[4];
+        root.right = symbols[4];
+        root.right.tree = tree;
+        return root;
+    }
+    
+    
+    return {
+        doubleNegation: doubleNegation
+    };
+})();
+var Parser = (function(){
     
     var symbols = [
     //  {
@@ -167,9 +214,50 @@ var parse = (function(){
         
     }
     
-    return parse;
+    
+    function size(tree) {
+        if (tree) {
+            return 1 + size(tree.left) + size(tree.right);
+        }
+        return 0;
+    }
+    
+    
+    function printTree(tree, letters) {
+        
+        if (tree) {
+            
+            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+                letters.push('(');
+            printTree(tree.left, letters);
+            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+                letters.push(')');
+            
+            if (tree.value.symbol) {
+                letters.push(tree.value.symbol);    
+            } else {
+                letters.push(tree.value);
+            }
+            
+            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+                letters.push('(');
+            printTree(tree.right, letters);
+            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+                letters.push(')');
+        }
+    }
+    
+    return {
+        parse: parse,
+        toString: function(tree) {
+            var s = [];
+            printTree(tree, s);
+            return s.join('');
+        }
+    };
     
 })();
+
 var Box = (function() {
     function Box(node) {
         this.node = node;
@@ -201,18 +289,18 @@ var Expressions = (function() {
     Expressions.prototype.addPremises = function(premises) {
         this.expressions = premises.map(function(exp) {
             return {
-                expression: exp,
+                expression: Parser.parse(exp),
                 law: 'Premise'
             }
         });
     };
     
     Expressions.prototype.addExpression = function(exp, render) {
-        this.expressions.push(exp);
+        this.expressions.push(Parser.parse(exp));
         // Optimise rendering so no need to re-render all
         if (render)
             this.node.innerHTML += compileExp({
-                expression: 'This will be automatic',
+                expression: Parser.toString(Parser.parse(exp)),
                 law: exp
             });
         
@@ -223,9 +311,10 @@ var Expressions = (function() {
         
         
         for (var i=0; i<this.expressions.length; i++) {
+            console.log(this.expressions);
             var expression = this.expressions[i];
             this.node.innerHTML += template
-                            .replace('{EXPRESSION}', expression.expression)
+                            .replace('{EXPRESSION}', Parser.toString(expression.expression))
                             .replace('{LAW}', expression.law);
         }
         
@@ -419,7 +508,7 @@ var InputBox = (function(){
     
     
     ruleInputBox.submitFn = function() {
-        expressionsBox.addExpression(ruleInput.value, true);
+        expressionsBox.addExpression(Parser.parse(ruleInput.value, true));
         this.clear();
     };
 
