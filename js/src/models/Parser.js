@@ -4,7 +4,7 @@ var Parser = (function(){
     function preprocess(input){
         var symbolsRegx = Operator.symbols.map(function(symbol) {
              // Operator and a special regex symbol so much be escaped
-             if(symbol === "^" ){
+             if(symbol === "^" || symbol === "+"){
                  return "\\" + symbol; 
              }   
             return symbol;
