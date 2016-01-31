@@ -156,14 +156,14 @@ var Parser = (function(){
         
         if (operator.arity === 1){
             var rightExpr = exprStack.pop();
-            if (!rightExpr) throw "Invalid number of arguments for " + operator.symbol + " expected 1, 0 given."; 
+            // if (!rightExpr) throw "Invalid number of arguments for " + operator.symbol + " expected 1, 0 given."; 
             
             exprStack.push(new Expression(operator, rightExpr));
         } else if (operator.arity === 2){
             var rightExpr = exprStack.pop();
             var leftExpr = exprStack.pop();
-            if (!leftExpr || !rightExpr) 
-                throw "Invalid number of arguments for " + operator.symbol + " expected 2, "+(!!leftExpr+!!rightExpr)+" given.";
+            // if (!leftExpr || !rightExpr) 
+            //     throw "Invalid number of arguments for " + operator.symbol + " expected 2, "+(!!leftExpr+!!rightExpr)+" given.";
             exprStack.push(new Expression(operator, leftExpr, rightExpr));
         }
         
@@ -219,7 +219,7 @@ var Parser = (function(){
         
     }
     
-    
+    // Counts the number of nodes in a tree
     function size(tree) {
         if (tree) {
             return 1 + size(tree.left) + size(tree.right);
@@ -228,26 +228,38 @@ var Parser = (function(){
     }
     
     
+    function needsBrackets(tree, branch) {
+        return size(branch) > 1 && branch.value.precedence < tree.value.precedence;
+    }
+    
     function printTree(tree, letters) {
         
         if (tree) {
+            var leftBranch = needsBrackets(tree, tree.left);
+            var rightBranch = needsBrackets(tree, tree.right);
             
-            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+            // Add brackets only if they are needed
+            if (leftBranch)
                 letters.push('(');
+                
             printTree(tree.left, letters);
-            if (size(tree.left) > 1 && tree.left.value.precedence < tree.value.precedence)
+            
+            if (leftBranch)
                 letters.push(')');
             
+            // Print the node value, could be a symbol or a string
             if (tree.value.symbol) {
                 letters.push(tree.value.symbol);    
             } else {
                 letters.push(tree.value);
             }
             
-            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+            if (rightBranch)
                 letters.push('(');
+                
             printTree(tree.right, letters);
-            if (size(tree.right) > 1 && tree.right.value.precedence < tree.value.precedence)
+            
+            if (rightBranch)
                 letters.push(')');
         }
     }
