@@ -45,7 +45,7 @@
             console.log('here');
             console.log(expressionsBox.getLine(line));
             expressionsBox.addLine({
-                expression: Rule.doubleNegation(expressionsBox.getLine(line).expression),
+                expression: Rule.doubleNegationIntroduction(expressionsBox.getLine(line).expression),
                 law: "Double Negation " + line
             }, true);
             this.clear();

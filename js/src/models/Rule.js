@@ -17,15 +17,27 @@ var Rule = (function() {
     }
     
     
-    function doubleNegation(tree) {
+    function doubleNegationIntroduction(tree) {
         var root = new Expression(Operator.not);
         root.right = new Expression(Operator.not);
         root.right.right = tree;
         return root;
     }
+    
+    function doubleNegationElimination(tree) {
+        
+        if ((tree.value === Operator.not) &&
+            (tree.right.value === Operator.not)
+        ) {
+            return tree.right.right;
+        } else {
+            throw 'Does not follow, much have two nots at the start of the expression.';
+        }
+    }
         
     return {
-        doubleNegation: doubleNegation,
+        doubleNegationIntroduction: doubleNegationIntroduction,
+        doubleNegationElimination: doubleNegationElimination,
         conjuctionIntroduction: conjuctionIntroduction,
         conjuctionElimination1: conjuctionElimination1,
         conjuctionElimination2: conjuctionElimination2

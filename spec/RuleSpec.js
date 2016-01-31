@@ -1,14 +1,14 @@
 describe('Valid logical rules are applied to well formed expressions', function() {
     
     
-    describe('Double negation, negates a given expression twice', function() {
+    describe('Double introduction negation, negates a given expression twice', function() {
         
         it('Should negate an expression of length 1', function() {
             
             var expr = new Expression('a');
             var expectedExpr = new Expression('¬¬a');
             
-            var actual = Rule.doubleNegation(expr);
+            var actual = Rule.doubleNegationIntroduction(expr);
             
             expect(actual.toString()).toBe(expectedExpr.toString());
             
@@ -18,7 +18,31 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expr = Parser.parse('a^b');
             var expectedExpr = Parser.parse('¬¬(a^b)');
             
-            var actual = Rule.doubleNegation(expr);
+            var actual = Rule.doubleNegationIntroduction(expr);
+            
+            expect(actual.toString()).toBe(expectedExpr.toString());
+        });
+        
+    });
+    
+    describe('Double negation elimination removes double not at the start of expression', function() {
+        
+        it('Should negate an expression of length 1', function() {
+            
+            var expr = Parser.parse('¬¬a');
+            var expectedExpr = new Expression('a');
+            
+            var actual = Rule.doubleNegationElimination(expr);
+            
+            expect(actual.toString()).toBe(expectedExpr.toString());
+            
+        });
+        
+        it('Should negate an expresssion of length larger than 1 and remember precedence', function() {
+            var expr = Parser.parse('¬¬(a^b)');
+            var expectedExpr = Parser.parse('a^b');
+            
+            var actual = Rule.doubleNegationElimination(expr);
             
             expect(actual.toString()).toBe(expectedExpr.toString());
         });
