@@ -1,3 +1,71 @@
+
+var Operator = (function() {
+    
+    var Symbol = {
+        iff: {
+            symbol: "<=>",
+            precedence: 0,
+            arity: 2
+        },
+        implies: {
+            symbol: "=>",
+            precedence: 1,
+            arity: 2    
+        },
+        and: {
+            symbol: "^",
+            precedence: 2,
+            arity: 2
+        },
+        or: {
+            symbol: "v",
+            precedence: 2,
+            arity: 2
+        },
+        not: {
+            symbol: "¬",
+            precedence: 3,
+            arity: 1
+        }
+    };
+    
+    var symbols = Object.keys(Symbol).map(function(name) {
+       return Symbol[name].symbol; 
+    });
+    
+    
+
+    // Given a string convert the string to an operator
+    function fromSymbol(symbol) {
+        
+        for (var key in Symbol) {
+            var actualSymbol = Symbol[key];
+            if (actualSymbol.symbol === symbol) {
+                return actualSymbol;
+            }
+        }
+    }
+    
+    // Predicate to check where a string is a operator
+    function isOperator(string){
+        return !!fromSymbol(string)
+    }
+    
+    return {
+        symbols: symbols,
+        
+        iff: Symbol.iff,
+        implies: Symbol.implies,
+        or: Symbol.or,
+        and: Symbol.and,
+        not: Symbol.not,
+        
+        fromSymbol: fromSymbol,
+        isOperator: isOperator
+    };
+})();
+
+
 var Rules = (function() {
     
     var symbols = [
@@ -46,49 +114,6 @@ var Rules = (function() {
     };
 })();
 var Parser = (function(){
-    
-    var symbols = [
-    //  {
-    //      name: "opening-bracket",
-    //      symbol: "(",
-    //      precedence: 4
-    //  },
-    //  {
-    //      name: "closing-bracket",
-    //      symbol: ")",
-    //      precedence: 4
-    //  },
-     {
-         name: "iff",
-         symbol: "<=>",
-         precedence: 0,
-         arity: 2
-     },
-     {
-         name: "implies",
-         symbol: "=>",
-         precedence: 1,
-         arity: 2    
-     },
-     {
-         name: "and",
-         symbol: "^",
-         precedence: 2,
-         arity: 2
-     },
-     {
-         name: "or",
-         symbol: "v",
-         precedence: 2,
-         arity: 2
-     },
-     {
-         name: "not",
-         symbol: "¬",
-         precedence: 3,
-         arity: 1
-     }
-    ];
         
     function Expression(){
         //either a value (like a word, terminal etc), or an operator in a larger expression
@@ -105,38 +130,18 @@ var Parser = (function(){
         }
     }
     
-    function stringToSymbol(str){
-        for(var i = 0; i < symbols.length; i++){
-            if(str === symbols[i].symbol){
-                return symbols[i];
-            }
-        }
-    }
-    
-    function isSymbol(str){
-        for(var i = 0; i < symbols.length; i++){
-            if(str === symbols[i].symbol){
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
     function preprocess(input){
-         var symbolsRegx = symbols.map(function(el) {
-             //|| el.symbol === "(" || el.symbol === ")"
-            if(el.symbol === "^" ){
-                return "\\" + el.symbol; 
+         var symbolsRegx = Operator.symbols.map(function(symbol) {
+            if(symbol === "^" ){
+                return "\\" + symbol; 
             }
             
-            return el.symbol;
+            return symbol;
         }).join('|');
         
-        console.log(symbolsRegx);
         
         var regex = new RegExp("\\)|\\(|[a-zA-Z]+|" + symbolsRegx, "g");
-        
+        console.log(regex);
         var tokenList = input.match(regex);
         
         return tokenList;
@@ -169,12 +174,12 @@ var Parser = (function(){
                 
         for(var tokenIndex in tokenList){
             var token = tokenList[tokenIndex];
-            var tokenSymbol = stringToSymbol(token);
+            var operator = Operator.fromSymbol(token);
             console.log(token);
             
-            if(token === "(" || (operatorStack.length === 0) && (isSymbol(token))){
-                if(isSymbol(token)){
-                    operatorStack.push(tokenSymbol);
+            if(token === "(" || (operatorStack.length === 0) && (Operator.isOperator(token))){
+                if(Operator.isOperator(token)){
+                    operatorStack.push(operator);
                 }else{
                     operatorStack.push(token);
                 }
@@ -183,15 +188,15 @@ var Parser = (function(){
                     applyOperator(operatorStack, exprStack);
                 }
                 operatorStack.pop();
-            }else if(isSymbol(token)){
-                if(operatorStack[operatorStack.length-1] === "(" || operatorStack[operatorStack.length-1].precedence <= tokenSymbol.precedence){
-                    operatorStack.push(tokenSymbol);
-                }else if(operatorStack[operatorStack.length-1].precedence > tokenSymbol.precedence){
+            }else if(Operator.isOperator(token)){
+                if(operatorStack[operatorStack.length-1] === "(" || operatorStack[operatorStack.length-1].precedence <= operator.precedence){
+                    operatorStack.push(operator);
+                }else if(operatorStack[operatorStack.length-1].precedence > operator.precedence){
                     //only works for binary operations
                     applyOperator(operatorStack, exprStack);
-                    operatorStack.push(tokenSymbol);
+                    operatorStack.push(operator);
                 }
-            }else if(!isSymbol(token)){
+            }else if(!Operator.isOperator(token)){
                 exprStack.push(new Expression(token));
             }
             

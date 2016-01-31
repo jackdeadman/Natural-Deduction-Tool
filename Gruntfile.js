@@ -13,7 +13,7 @@ module.exports = function(grunt){
         
         concat: {
             dist: {
-                src: ['js/src/Rules.js', 'js/src/Parser.js','js/src/Box.js','js/src/Expressions.js', 'js/src/InputBox.js', 'js/src/parsetree.js', 'js/src/main.js'],
+                src: ['js/src/Operator.js', 'js/src/Rules.js', 'js/src/Parser.js','js/src/Box.js','js/src/Expressions.js', 'js/src/InputBox.js', 'js/src/parsetree.js', 'js/src/main.js'],
                 dest: 'js/main.js'
             }
         },
