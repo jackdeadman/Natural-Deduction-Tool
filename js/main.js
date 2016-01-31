@@ -66,53 +66,6 @@ var Operator = (function() {
 })();
 
 
-var Rules = (function() {
-    
-    var symbols = [
-     {
-         name: "iff",
-         symbol: "<=>",
-         precedence: 0,
-         arity: 2
-     },
-     {
-         name: "implies",
-         symbol: "=>",
-         precedence: 1,
-         arity: 2    
-     },
-     {
-         name: "and",
-         symbol: "^",
-         precedence: 2,
-         arity: 2
-     },
-     {
-         name: "or",
-         symbol: "v",
-         precedence: 2,
-         arity: 2
-     },
-     {
-         name: "not",
-         symbol: "¬",
-         precedence: 3,
-         arity: 1
-     }
-    ];
-    
-    function doubleNegation(tree) {
-        var root = symbols[4];
-        root.right = symbols[4];
-        root.right.tree = tree;
-        return root;
-    }
-    
-    
-    return {
-        doubleNegation: doubleNegation
-    };
-})();
 var Parser = (function(){
         
     function Expression(){
@@ -275,6 +228,20 @@ var Parser = (function(){
     
 })();
 
+var Rules = (function() {
+    
+    function doubleNegation(tree) {
+        var root = symbols[4];
+        root.right = symbols[4];
+        root.right.tree = tree;
+        return root;
+    }
+    
+    
+    return {
+        doubleNegation: doubleNegation
+    };
+})();
 var Box = (function() {
     function Box(node) {
         this.node = node;
@@ -395,97 +362,6 @@ var InputBox = (function(){
     
     return InputBox;
 })();
-  function Grammar(productions) {
-      var productionsParsed = [];
-      
-      for (var i=0; i<productions.length; i++) {
-          productionsParsed[i] = parseProduction(productions[i])
-      }
-      
-      this.productions = productionsParsed;
-          
-  }
-  
-  
-  Grammar.prototype.findVariables = function(str) {
-      var production;
-      var validVariables = [];
-      
-      for (var i=0; i<this.productions.length; i++) {
-          production = this.productions[i];
-          
-          for (var j=0; j< production.length; j++) {
-              
-            if (str == production[j].ruleRight) {
-                  validVariables.push(production[j].ruleLeft);
-            }
-          }
-          
-      }
-      
-      return validVariables;
-  }
-  
-  function parseProduction(production) {
-      var delimeter = '->';
-      var parts = production.split(delimeter);
-      var ruleLeft = parts[0];
-      var ruleRight = parts[1].split('|');
-      console.log(ruleLeft, ruleRight);
-      var productionsParsed = []
-      
-      for (var i=0; i < ruleRight.length; i++) {
-          productionsParsed[i] = { ruleLeft: ruleLeft, ruleRight: ruleRight[i] }
-      }
-      
-      return productionsParsed;
-      
-  }
-  
-    
-    
-  function initialiseTable(word, grammar) {
-      var table = []; while(table.push([]) < word.length);
-      var letter = '';
-      
-      for (var i=0; i<word.length; i++) {
-          letter = word[i];
-          table[i][i] = grammar.findVariables(letter);
-      }
-      
-      return table;
-      
-  }
-  
-  function cyk(word, grammar) {
-      var table = initialiseTable(word, grammar)
-      
-      for (var size=2; size<word.length; size++) {
-          
-          for (var letter=0; letter<word.length; letter++) {
-              var row = letter;
-              var column = letter+size;
-              // look back
-              for (var lookback=1; lookback<size; lookback++) {
-                  
-                  if (table[row][column-lookback]) {
-                      
-                  }
-                  
-                  if (table[row+lookback][column]) {
-                      
-                  }
-              }
-              
-              
-          }
-          
-          table[letter]
-          
-      }
-      
-  }  
-    
 (function(){
     
     // alert("You are the 10 millionth visitor! You win a prize!");
