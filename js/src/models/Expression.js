@@ -26,6 +26,9 @@ var Expression = (function() {
                     && Expression.equals(tree1.left, tree2.left)
                     && Expression.equals(tree1.right, tree2.right);
     }
+    Expression.equivalent = function(tree1, tree2) {
+        return tree1.toString() === tree2.toString();    
+    }
     
     // Counts the number of nodes in a tree
     function size(tree) {
