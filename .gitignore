@@ -1,3 +1,6 @@
 node_modules/
 .settings/
 js/main.js
+js/src/LL.js
+scratch.js
+

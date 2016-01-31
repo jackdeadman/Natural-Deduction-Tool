@@ -37,13 +37,25 @@ module.exports = function(grunt){
                 files: ['js/src/*.js'],
                 tasks: ['concat']
             },
+        },
+        
+        jasmine: {
+            app: {
+                src: 'js/*.js',
+                options: {
+                    specs: 'spec/*Spec.js',
+                    helpers: 'spec/*Helper.js',
+                    host: 'http://127.0.0.1:5000/'
+                }
+            }
         }
         
     });
         
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-concat')
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     
     grunt.registerTask('default',['concat','connect','watch']);
     
