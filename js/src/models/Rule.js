@@ -7,6 +7,29 @@ var Rule = (function() {
         return root;
     }
     
+    function deMorgans(tree) {
+        var leftNot = new Expression(Operator.not);
+        var rightNot = new Expression(Operator.not);
+        var rootNot = new Expression(Operator.not);
+        
+        leftNot.right = tree.left;
+        rightNot.right = tree.right;
+        
+        var newRoot;
+        
+        if (tree.value === Operator.and) {
+            newRoot = new Expression(Operator.or);
+        } else if (tree.value === Operator.or) {
+            newRoot = new Expression(Operator.and); 
+        } else {
+            throw 'Demorgans law can only be applied to or and and';
+        }
+        newRoot.right = rightNot;
+        newRoot.left = leftNot;
+        rootNot.right = newRoot;
+        return rootNot;
+    }
+    
     // Trivial but still a rule
     function conjuctionElimination1(tree) {
         return tree.left;
@@ -52,6 +75,8 @@ var Rule = (function() {
         conjuctionElimination1: conjuctionElimination1,
         conjuctionElimination2: conjuctionElimination2,
         
-        implicationElimination: implicationElimination
+        implicationElimination: implicationElimination,
+        
+        deMorgans: deMorgans
     };
-})();
+})();   

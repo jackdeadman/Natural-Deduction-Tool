@@ -120,4 +120,23 @@ describe('Valid logical rules are applied to well formed expressions', function(
         });
     });
     
+    
+    describe('Demorgans law should convert conjunction into disjunction and vice versa', function() {
+        it('Should be able to convert a conjuction into a disjuction', function() {
+            var expr = Parser.parse('a^b');
+            var expected = Parser.parse('¬(¬a+¬b)');
+            var actual = Rule.deMorgans(expr);
+            
+            expect(actual.toString()).toBe(expected.toString());
+        });
+        
+        it('Should be able to convert a disjuction into a conjuction', function() {
+            var expr = Parser.parse('a+b');
+            var expected = Parser.parse('¬(¬a^¬b)');
+            var actual = Rule.deMorgans(expr);
+            
+            expect(actual.toString()).toBe(expected.toString());
+        });
+    });
+    
 });
