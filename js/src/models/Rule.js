@@ -39,6 +39,13 @@ var Rule = (function() {
         return tree.right;
     }
     
+    function disjuctionIntroduction(tree1, tree2) {
+        var root = new Expression(Operator.or);
+        root.left = tree1;
+        root.right = tree2;
+        return root;
+    }
+    
     
     function doubleNegationIntroduction(tree) {
         var root = new Expression(Operator.not);
@@ -74,6 +81,8 @@ var Rule = (function() {
         conjuctionIntroduction: conjuctionIntroduction,
         conjuctionElimination1: conjuctionElimination1,
         conjuctionElimination2: conjuctionElimination2,
+        
+        disjuctionIntroduction: disjuctionIntroduction,
         
         implicationElimination: implicationElimination,
         

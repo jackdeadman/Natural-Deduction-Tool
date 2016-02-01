@@ -120,6 +120,26 @@ describe('Valid logical rules are applied to well formed expressions', function(
         });
     });
     
+    describe('Disjunction introduction should add any statement to the right of an Or if given left is true.', function() {
+        it('Should be able to add an Or to simple expressions', function() {
+            var expr1 = Parser.parse('a');
+            var expr2 = Parser.parse('b');
+            var expected = Parser.parse('a+b');
+            var actual = Rule.disjuctionIntroduction(expr1, expr2);
+            
+            expect(actual.toString()).toBe(expected.toString());
+        });
+        
+        it('Should be able to add an Or to complex expressions', function() {
+            var expr1 = Parser.parse('a=>b');
+            var expr2 = Parser.parse('b=>a');
+            var expected = Parser.parse('(a=>b)+(b=>a)');
+            var actual = Rule.disjuctionIntroduction(expr1, expr2);
+            
+            expect(actual.toString()).toBe(expected.toString());
+        });
+    });
+    
     
     describe('Demorgans law should convert conjunction into disjunction and vice versa', function() {
         it('Should be able to convert a conjuction into a disjuction', function() {
