@@ -34,12 +34,24 @@ var Rule = (function() {
             throw 'Does not follow, much have two nots at the start of the expression.';
         }
     }
+    
+    // i.e a=>b, a
+    function implicationElimination(tree1, tree2) {
+        if ((tree1.value === Operator.implies) && (Expression.equivalent(tree1.left, tree2))) {
+            return tree1.right;
+        } else {
+            throw 'Does not follow.';
+        }
+    }
         
     return {
         doubleNegationIntroduction: doubleNegationIntroduction,
         doubleNegationElimination: doubleNegationElimination,
+        
         conjuctionIntroduction: conjuctionIntroduction,
         conjuctionElimination1: conjuctionElimination1,
-        conjuctionElimination2: conjuctionElimination2
+        conjuctionElimination2: conjuctionElimination2,
+        
+        implicationElimination: implicationElimination
     };
 })();

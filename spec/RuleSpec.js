@@ -110,4 +110,14 @@ describe('Valid logical rules are applied to well formed expressions', function(
     });
     
     
+    describe('Implication elimination should remove if antecedent is true', function() {
+        it('Should be able to remove simple implications', function() {
+            var expr1 = Parser.parse('a=>b');
+            var expr2 = Parser.parse('a');
+            var expected = Parser.parse('b');
+            var actual = Rule.implicationElimination(expr1, expr2);
+            expect(actual.toString()).toBe(expected.toString());
+        });
+    });
+    
 });
