@@ -6,6 +6,7 @@
     var premiseInput = document.getElementById('premise-input');
     var conclusionInput = document.getElementById('conclusion-input');
     var ruleInput = document.getElementById('rule-input');
+    var editButton = document.getElementById('premise-edit-button');
     
     var expressions = document.getElementById('expressions');
     var expressionsContainer = document.getElementById('expression-input-container');
@@ -35,6 +36,11 @@
         ruleInputBox.enable(true);
     });
     
+    editButton.addEventListener("click", function(){
+        if(!conclusionInputBox.node.disabled){
+            premiseInputBox.enable(true); 
+        }
+    });
     
     ruleInputBox.submitFn = function() {
         var input = ruleInput.value.split(' ');

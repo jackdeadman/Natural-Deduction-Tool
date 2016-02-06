@@ -40,7 +40,18 @@ input:disabled{
 }
 
 .button-small{
+    color: #fff;
+    font-weight: bold;
     align-self: center;
+    background-color: #3B8BED;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 0;
+    border-bottom: 3px solid #23528C;
+}
+
+.button-small:focus{
+    background-color: #16355B;
 }
 
 .main-wrapper{
