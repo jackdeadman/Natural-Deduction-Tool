@@ -34,11 +34,17 @@
         expressionsBox.render();
         expressionsContainerBox.show();
         ruleInputBox.enable(true);
+        editButton.innerHTML = "Reset";
     });
     
     editButton.addEventListener("click", function(){
         if(!conclusionInputBox.node.disabled){
             premiseInputBox.enable(true); 
+        }else{
+            premiseInputBox.clear();
+            conclusionInputBox.clear();
+            expressionsContainerBox.hide();
+            premiseInputBox.enable(true);
         }
     });
     
