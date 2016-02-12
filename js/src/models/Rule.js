@@ -22,7 +22,7 @@ var Rule = (function() {
         } else if (tree.value === Operator.or) {
             newRoot = new Expression(Operator.and); 
         } else {
-            throw 'Demorgans law can only be applied to or and and';
+            throw 'De Morgans law can only be applied to or and and';
         }
         newRoot.right = rightNot;
         newRoot.left = leftNot;
@@ -61,7 +61,7 @@ var Rule = (function() {
         ) {
             return tree.right.right;
         } else {
-            throw 'Does not follow, much have two nots at the start of the expression.';
+            throw 'Does not follow, must have two nots at the start of the expression.';
         }
     }
     
