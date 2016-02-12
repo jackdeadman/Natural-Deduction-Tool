@@ -46,6 +46,8 @@ var Solver = (function(){
             tree1 = node[0];
             tree2 = node[1];
             
+            // need checks for which rules are possible
+            
             treeList.push(Rule.conjunctionIntroduction(tree1, tree2));
             treeList.push(Rule.disjunctionIntroduction(tree1, tree2));
             treeList.push(Rule.implicationElimination(tree1, tree2));
@@ -53,7 +55,6 @@ var Solver = (function(){
             tree1 = node;
             
             treeList.push(Rule.doubleNegationIntroduction(tree1));
-            // need checks for which rules are possible
             // treeList.push(Rule.deMorgans(tree1));
             // treeList.push(Rule.conjunctionElimination(tree1));
             

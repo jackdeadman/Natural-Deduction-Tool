@@ -1,6 +1,6 @@
 var Rule = (function() {
     
-    function conjuctionIntroduction(tree1, tree2) {
+    function conjunctionIntroduction(tree1, tree2) {
         var root = new Expression(Operator.and);
         root.left = tree1;
         root.right = tree2;
@@ -31,15 +31,15 @@ var Rule = (function() {
     }
     
     // Trivial but still a rule
-    function conjuctionElimination1(tree) {
+    function conjunctionElimination1(tree) {
         return tree.left;
     }
     
-    function conjuctionElimination2(tree) {
+    function conjunctionElimination2(tree) {
         return tree.right;
     }
     
-    function disjuctionIntroduction(tree1, tree2) {
+    function disjunctionIntroduction(tree1, tree2) {
         var root = new Expression(Operator.or);
         root.left = tree1;
         root.right = tree2;
@@ -78,11 +78,11 @@ var Rule = (function() {
         doubleNegationIntroduction: doubleNegationIntroduction,
         doubleNegationElimination: doubleNegationElimination,
         
-        conjuctionIntroduction: conjuctionIntroduction,
-        conjuctionElimination1: conjuctionElimination1,
-        conjuctionElimination2: conjuctionElimination2,
+        conjunctionIntroduction: conjunctionIntroduction,
+        conjunctionElimination1: conjunctionElimination1,
+        conjunctionElimination2: conjunctionElimination2,
         
-        disjuctionIntroduction: disjuctionIntroduction,
+        disjunctionIntroduction: disjunctionIntroduction,
         
         implicationElimination: implicationElimination,
         
