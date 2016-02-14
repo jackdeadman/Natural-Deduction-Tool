@@ -53,17 +53,66 @@
     ruleInputBox.submitFn = function() {
         var input = ruleInput.value.split(' ');
         var rule = input[0];
-        var line = input[1];
+        var line1 = input[1];
+        var line2 = input[2];
         
-        if (rule === 'nn') {
-            console.log('here');
-            console.log(expressionsBox.getLine(line));
+        switch(rule) {
+        case 'nni':
             expressionsBox.addLine({
-                expression: Rule.doubleNegationIntroduction(expressionsBox.getLine(line).expression),
-                law: "Double Negation " + line
+                expression: Rule.doubleNegationIntroduction(expressionsBox.getLine(line1).expression),
+                law: "Double Negation Introduction " + line1
             }, true);
-            this.clear();
+            break;
+        
+        case 'nne':
+            expressionsBox.addLine({
+                expression: Rule.doubleNegationElimination(expressionsBox.getLine(line1).expression),
+                law: "Double Negation Elimination " + line1
+            }, true);
+            break;
+        
+        case 'coni':
+            expressionsBox.addLine({
+                expression: Rule.conjunctionIntroduction(expressionsBox.getLine(line1).expression, expressionsBox.getLine(line2).expression),
+                law: "Conjuction Introduction " + line1 + ", " + line2
+            }, true);
+            break;
+        
+        case 'cone1':
+            expressionsBox.addLine({
+                expression: Rule.conjunctionElimination1(expressionsBox.getLine(line1).expression),
+                law: "Conjuction Elimination1 " + line1
+            }, true);
+            break;
+            
+        case 'cone2':
+            expressionsBox.addLine({
+                expression: Rule.conjunctionElimination2(expressionsBox.getLine(line1).expression),
+                law: "Conjuction Elimination2 " + line1
+            }, true);
+            break;
+            
+        case 'disi':
+            expressionsBox.addLine({
+                expression: Rule.disjunctionIntroduction(expressionsBox.getLine(line1).expression, expressionsBox.getLine(line2).expression),
+                law: "Disjuction Introduction " + line1 + ", " + line2
+            }, true);
+            break;
+            
+        case 'impe':
+            expressionsBox.addLine({
+                expression: Rule.implicationElimination(expressionsBox.getLine(line1).expression, expressionsBox.getLine(line2).expression),
+                law: "Implication elimination " + line1 + ", " + line2
+            }, true);
+            break;
+            
+        case 'dm':
+            expressionsBox.addLine({
+                expression: Rule.deMorgans(expressionsBox.getLine(line1).expression),
+                law: "De Morgans law " + line1
+            }, true);
         }
+        this.clear();
     };
 
 })();
