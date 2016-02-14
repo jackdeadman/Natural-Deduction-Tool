@@ -22,7 +22,7 @@ var Rule = (function() {
         } else if (tree.value === Operator.or) {
             newRoot = new Expression(Operator.and); 
         } else {
-            throw 'De Morgans law can only be applied to or and and';
+            throw new RuleDoesNotFollowException('De Morgans law can only be applied to or and and');
         }
         newRoot.right = rightNot;
         newRoot.left = leftNot;
@@ -32,11 +32,19 @@ var Rule = (function() {
     
     // Trivial but still a rule
     function conjunctionElimination1(tree) {
-        return tree.left;
+        if (tree.value === Operator.and) {
+            return tree.left;   
+        } else {
+            throw new RuleDoesNotFollowException('Can only be applied to conjuction');
+        } 
     }
     
     function conjunctionElimination2(tree) {
-        return tree.right;
+        if (tree.value === Operator.and) {
+            return tree.right;   
+        } else {
+            throw new RuleDoesNotFollowException('Can only be applied to conjuction');
+        } 
     }
     
     function disjunctionIntroduction(tree1, tree2) {
@@ -61,17 +69,22 @@ var Rule = (function() {
         ) {
             return tree.right.right;
         } else {
-            throw 'Does not follow, must have two nots at the start of the expression.';
+            throw new RuleDoesNotFollowException('Must have two nots at the start of the expression.');
         }
     }
     
     // i.e a=>b, a
     function implicationElimination(tree1, tree2) {
-        if ((tree1.value === Operator.implies) && (Expression.equivalent(tree1.left, tree2))) {
-            return tree1.right;
+        if (tree1.value === Operator.implies) {
+            if (Expression.equivalent(tree1.left, tree2)) {
+                return tree1.right;
+            } else {
+                throw new RuleDoesNotFollowException('Antecedent does not match the given proposition.');
+            }
         } else {
-            throw 'Does not follow.';
+            throw new RuleDoesNotFollowException('Can only apply implication elimination on implication');
         }
+        
     }
         
     return {

@@ -47,6 +47,11 @@ describe('Valid logical rules are applied to well formed expressions', function(
             expect(actual.toString()).toBe(expectedExpr.toString());
         });
         
+        it('Should only work on expressions with two nots', function() {
+            var expr = Parser.parse('a');
+            expect(Rule.doubleNegationElimination.bind(null, expr)).toThrowError(RuleDoesNotFollowException);
+        });
+        
     });
     
     
@@ -56,7 +61,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expr2 = Parser.parse('b');
             var expectedExpr = Parser.parse('a^b');
             
-            var actual = Rule.conjuctionIntroduction(expr1, expr2);
+            var actual = Rule.conjunctionIntroduction(expr1, expr2);
             
             expect(actual.toString()).toBe(expectedExpr.toString());
         });
@@ -66,32 +71,33 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expr2 = Parser.parse('b=>a');
             var expectedExpr = Parser.parse('(a=>b)^(b=>a)');
             
-            var actual = Rule.conjuctionIntroduction(expr1, expr2);
+            var actual = Rule.conjunctionIntroduction(expr1, expr2);
             
             expect(actual.toString()).toBe(expectedExpr.toString());
         });
     });
     
-    describe('Conjuction elimination should remove one side of the conjuction', function() {
+    describe('conjunction elimination should remove one side of the conjunction', function() {
         
         describe('Removes simple expressions', function() {
            var expr = Parser.parse('a^b');
            it('Should be able to remove the left side', function() {
-               var actual = Rule.conjuctionElimination1(expr);
+               var actual = Rule.conjunctionElimination1(expr);
                var expected = Parser.parse('a');
                expect(actual.toString()).toBe(expected.toString());
            });
            
            it('Should be able to remove the right side', function() {
-               var actual = Rule.conjuctionElimination2(expr);
+               var actual = Rule.conjunctionElimination2(expr);
                var expected = Parser.parse('b');
                expect(actual.toString()).toBe(expected.toString());
            });
            
-           var expr = Parser.parse('a+b');
+           var expr2 = Parser.parse('a+b');
            
-           it('Should only work on conjuction', function() {
-               expect(Rule.conjuctionElimination2(expr)).toThrow();
+           it('Should only work on conjunction', function() {
+               expect(Rule.conjunctionElimination2.bind(null, expr2)).toThrowError(RuleDoesNotFollowException);
+               expect(Rule.conjunctionElimination1.bind(null, expr2)).toThrowError(RuleDoesNotFollowException);
            });
            
         });
@@ -100,13 +106,13 @@ describe('Valid logical rules are applied to well formed expressions', function(
         describe('Removes complex expressions', function() {
            var expr = Parser.parse('(a=>b)^(b=>a)');
            it('Should be able to remove the left side', function() {
-               var actual = Rule.conjuctionElimination1(expr);
+               var actual = Rule.conjunctionElimination1(expr);
                var expected = Parser.parse('a=>b');
                expect(actual.toString()).toBe(expected.toString());
            });
            
            it('Should be able to remove the right side', function() {
-               var actual = Rule.conjuctionElimination2(expr);
+               var actual = Rule.conjunctionElimination2(expr);
                var expected = Parser.parse('b=>a');
                expect(actual.toString()).toBe(expected.toString());
            });
@@ -128,9 +134,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
         it('Should only work on implication', function() {
             var expr1 = Parser.parse('a^b');
             var expr2 = Parser.parse('a');
-            var expected = Parser.parse('b');
-            var actual = Rule.implicationElimination(expr1, expr2);
-            expect(Rule.implicationElimination(expr1, expr2)).toThrow();
+            expect(Rule.implicationElimination.bind(null, expr1, expr2)).toThrowError(RuleDoesNotFollowException);
         });
     });
     
@@ -139,7 +143,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expr1 = Parser.parse('a');
             var expr2 = Parser.parse('b');
             var expected = Parser.parse('a+b');
-            var actual = Rule.disjuctionIntroduction(expr1, expr2);
+            var actual = Rule.disjunctionIntroduction(expr1, expr2);
             
             expect(actual.toString()).toBe(expected.toString());
         });
@@ -148,7 +152,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expr1 = Parser.parse('a=>b');
             var expr2 = Parser.parse('b=>a');
             var expected = Parser.parse('(a=>b)+(b=>a)');
-            var actual = Rule.disjuctionIntroduction(expr1, expr2);
+            var actual = Rule.disjunctionIntroduction(expr1, expr2);
             
             expect(actual.toString()).toBe(expected.toString());
         });
@@ -156,7 +160,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
     
     
     describe('Demorgans law should convert conjunction into disjunction and vice versa', function() {
-        it('Should be able to convert a conjuction into a disjuction', function() {
+        it('Should be able to convert a conjunction into a disjunction', function() {
             var expr = Parser.parse('a^b');
             var expected = Parser.parse('¬(¬a+¬b)');
             var actual = Rule.deMorgans(expr);
@@ -164,7 +168,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
             expect(actual.toString()).toBe(expected.toString());
         });
         
-        it('Should be able to convert a disjuction into a conjuction', function() {
+        it('Should be able to convert a disjunction into a conjunction', function() {
             var expr = Parser.parse('a+b');
             var expected = Parser.parse('¬(¬a^¬b)');
             var actual = Rule.deMorgans(expr);
@@ -174,7 +178,7 @@ describe('Valid logical rules are applied to well formed expressions', function(
         
         it('Should only work on conjunction or disjunction', function() {
            var expr = Parser.parse('a=>b');
-           expect(Rule.deMorgans(expr)).toThrow(); 
+           expect(Rule.deMorgans.bind(null, expr)).toThrowError(RuleDoesNotFollowException); 
         });
     });
     
