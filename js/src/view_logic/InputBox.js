@@ -22,6 +22,10 @@ var InputBox = (function(){
         }
     }
     
+    InputBox.prototype.value = function() {
+        return this.node.value;
+    }
+    
     InputBox.prototype.enable = function(focus) {
         this.node.classList.remove('hidden');
         this.node.classList.remove('disabled');

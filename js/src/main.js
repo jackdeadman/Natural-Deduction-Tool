@@ -31,6 +31,7 @@
     conclusionInputBox.onSubmit(function() {
         conclusionInputBox.disable();
         expressionsBox.addPremises(premiseInput.value.split(','));
+        expressionsBox.addConclusion(Parser.parse(conclusionInputBox.value()));
         expressionsBox.render();
         expressionsContainerBox.show();
         ruleInputBox.enable(true);
@@ -40,14 +41,19 @@
     editButtonBox.onClick(function(){
         if(!conclusionInputBox.isDisabled()){
             premiseInputBox.enable(true);
-            editButtonBox.hide();
             conclusionInputBox.disable();
         }else{
             premiseInputBox.clear();
             conclusionInputBox.clear();
             expressionsContainerBox.hide();
             premiseInputBox.enable(true);
+            editButtonBox.set('Edit');
         }
+        editButtonBox.hide();
+    });
+    
+    expressionsBox.onSuccess(function() {
+        alert('Woo');
     });
     
     ruleInputBox.submitFn = function() {

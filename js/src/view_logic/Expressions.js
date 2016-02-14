@@ -20,6 +20,10 @@ var Expressions = (function() {
         });
     };
     
+    Expressions.prototype.addConclusion = function(statement) {
+        this.conclusion = statement;
+    }
+    
     Expressions.prototype.addLine = function(line, render) {
         this.expressions.push(line);
 
@@ -29,6 +33,14 @@ var Expressions = (function() {
                 expression: line.expression.toString(),
                 law: line.law
             });
+        
+        if (Expression.equivalent(line.expression, this.conclusion)) {
+            this.successfn();
+        }
+    }
+    
+    Expressions.prototype.onSuccess = function(fn) {
+        this.successfn = fn;
     }
     
     Expressions.prototype.getLine = function(line) {
