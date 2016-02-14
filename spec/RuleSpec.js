@@ -88,6 +88,12 @@ describe('Valid logical rules are applied to well formed expressions', function(
                expect(actual.toString()).toBe(expected.toString());
            });
            
+           var expr = Parser.parse('a+b');
+           
+           it('Should only work on conjuction', function() {
+               expect(Rule.conjuctionElimination2(expr)).toThrow();
+           });
+           
         });
         
         
@@ -117,6 +123,14 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var expected = Parser.parse('b');
             var actual = Rule.implicationElimination(expr1, expr2);
             expect(actual.toString()).toBe(expected.toString());
+        });
+        
+        it('Should only work on implication', function() {
+            var expr1 = Parser.parse('a^b');
+            var expr2 = Parser.parse('a');
+            var expected = Parser.parse('b');
+            var actual = Rule.implicationElimination(expr1, expr2);
+            expect(Rule.implicationElimination(expr1, expr2)).toThrow();
         });
     });
     
@@ -156,6 +170,11 @@ describe('Valid logical rules are applied to well formed expressions', function(
             var actual = Rule.deMorgans(expr);
             
             expect(actual.toString()).toBe(expected.toString());
+        });
+        
+        it('Should only work on conjunction or disjunction', function() {
+           var expr = Parser.parse('a=>b');
+           expect(Rule.deMorgans(expr)).toThrow(); 
         });
     });
     
