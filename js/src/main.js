@@ -17,7 +17,7 @@
     var expressionsBox = new Expressions(expressions);
     var expressionsContainerBox = new Box(expressionsContainer);
     var ruleInputBox = new InputBox(ruleInput);
-    
+    var editButtonBox = new Button(editButton);
     
     conclusionInputBox.disable();
     expressionsContainerBox.hide();
@@ -34,12 +34,14 @@
         expressionsBox.render();
         expressionsContainerBox.show();
         ruleInputBox.enable(true);
-        editButton.innerHTML = "Reset";
+        editButtonBox.set('Reset');
     });
     
-    editButton.addEventListener("click", function(){
-        if(!conclusionInputBox.node.disabled){
-            premiseInputBox.enable(true); 
+    editButtonBox.onClick(function(){
+        if(!conclusionInputBox.isDisabled()){
+            premiseInputBox.enable(true);
+            editButtonBox.hide();
+            conclusionInputBox.disable();
         }else{
             premiseInputBox.clear();
             conclusionInputBox.clear();

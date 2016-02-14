@@ -31,6 +31,10 @@ var InputBox = (function(){
             this.node.focus();
     }
     
+    InputBox.prototype.isDisabled = function() {
+        return this.node.disabled;
+    }
+    
     InputBox.prototype.onSubmit = function(fn) {
         this.submitFn = fn;
     }
