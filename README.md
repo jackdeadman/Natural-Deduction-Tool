@@ -8,7 +8,7 @@ Tool to help practising proofing formulas using natural deduction. The tool is a
 1. Conjunction Introduction
 2. Conjunction Elimination
 3. Disjunction Introduction
-4. Implication Elimination (Modus Pollens)
+4. Implication Elimination (Modus Ponens)
 5. Double Negation Introduction
 6. Double Negation Elimination
 
